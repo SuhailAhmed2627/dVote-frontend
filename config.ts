@@ -1,5 +1,239 @@
-export const contractID = "0x1DC083533459C3fb20859175746ED148fE87ef84";
+export const contractID = "0xe9738b2a0EC248a0dbbB73685ED2ce5E67FF37b7";
 export const contractABI = [
+	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "electionId",
+				type: "uint256",
+			},
+			{
+				components: [
+					{
+						internalType: "uint256",
+						name: "option",
+						type: "uint256",
+					},
+					{
+						internalType: "string",
+						name: "name",
+						type: "string",
+					},
+					{
+						internalType: "string",
+						name: "description",
+						type: "string",
+					},
+					{
+						internalType: "bool",
+						name: "exists",
+						type: "bool",
+					},
+					{
+						internalType: "uint256",
+						name: "votes",
+						type: "uint256",
+					},
+				],
+				indexed: false,
+				internalType: "struct Party[]",
+				name: "leaderboard",
+				type: "tuple[]",
+			},
+		],
+		name: "LeaderBoardUpdate",
+		type: "event",
+	},
+	{
+		inputs: [],
+		name: "electionCount",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256",
+			},
+		],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256",
+			},
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256",
+			},
+		],
+		name: "electionParties",
+		outputs: [
+			{
+				internalType: "uint256",
+				name: "option",
+				type: "uint256",
+			},
+			{
+				internalType: "string",
+				name: "name",
+				type: "string",
+			},
+			{
+				internalType: "string",
+				name: "description",
+				type: "string",
+			},
+			{
+				internalType: "bool",
+				name: "exists",
+				type: "bool",
+			},
+			{
+				internalType: "uint256",
+				name: "votes",
+				type: "uint256",
+			},
+		],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "getAllActiveElections",
+		outputs: [
+			{
+				components: [
+					{
+						internalType: "uint256",
+						name: "electionId",
+						type: "uint256",
+					},
+					{
+						internalType: "string",
+						name: "name",
+						type: "string",
+					},
+					{
+						internalType: "string",
+						name: "description",
+						type: "string",
+					},
+					{
+						internalType: "bool",
+						name: "exists",
+						type: "bool",
+					},
+					{
+						internalType: "address",
+						name: "creator",
+						type: "address",
+					},
+				],
+				internalType: "struct Election[]",
+				name: "",
+				type: "tuple[]",
+			},
+		],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "electionId",
+				type: "uint256",
+			},
+			{
+				internalType: "uint256",
+				name: "_merkleRoot",
+				type: "uint256",
+			},
+		],
+		name: "getElectionStatus",
+		outputs: [
+			{
+				components: [
+					{
+						internalType: "uint256",
+						name: "option",
+						type: "uint256",
+					},
+					{
+						internalType: "string",
+						name: "name",
+						type: "string",
+					},
+					{
+						internalType: "string",
+						name: "description",
+						type: "string",
+					},
+					{
+						internalType: "bool",
+						name: "exists",
+						type: "bool",
+					},
+					{
+						internalType: "uint256",
+						name: "votes",
+						type: "uint256",
+					},
+				],
+				internalType: "struct Party[]",
+				name: "",
+				type: "tuple[]",
+			},
+		],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [],
+		name: "getElectionsByUser",
+		outputs: [
+			{
+				components: [
+					{
+						internalType: "uint256",
+						name: "electionId",
+						type: "uint256",
+					},
+					{
+						internalType: "string",
+						name: "name",
+						type: "string",
+					},
+					{
+						internalType: "string",
+						name: "description",
+						type: "string",
+					},
+					{
+						internalType: "bool",
+						name: "exists",
+						type: "bool",
+					},
+					{
+						internalType: "address",
+						name: "creator",
+						type: "address",
+					},
+				],
+				internalType: "struct Election[]",
+				name: "",
+				type: "tuple[]",
+			},
+		],
+		stateMutability: "view",
+		type: "function",
+	},
 	{
 		inputs: [
 			{
@@ -27,28 +261,14 @@ export const contractABI = [
 				type: "uint256",
 			},
 			{
-				internalType: "uint256",
-				name: "_merkleRoot",
-				type: "uint256",
+				internalType: "string",
+				name: "name",
+				type: "string",
 			},
-		],
-		name: "getWinner",
-		outputs: [
 			{
-				internalType: "uint256",
-				name: "",
-				type: "uint256",
-			},
-		],
-		stateMutability: "view",
-		type: "function",
-	},
-	{
-		inputs: [
-			{
-				internalType: "uint256",
-				name: "electionId",
-				type: "uint256",
+				internalType: "string",
+				name: "description",
+				type: "string",
 			},
 			{
 				internalType: "address[]",
@@ -207,9 +427,9 @@ export const contractABI = [
 	{
 		inputs: [
 			{
-				internalType: "uint256",
+				internalType: "address",
 				name: "",
-				type: "uint256",
+				type: "address",
 			},
 			{
 				internalType: "uint256",
@@ -217,12 +437,12 @@ export const contractABI = [
 				type: "uint256",
 			},
 		],
-		name: "voters",
+		name: "voterElectionMap",
 		outputs: [
 			{
-				internalType: "address",
+				internalType: "uint256",
 				name: "",
-				type: "address",
+				type: "uint256",
 			},
 		],
 		stateMutability: "view",
@@ -241,17 +461,12 @@ export const contractABI = [
 				type: "uint256",
 			},
 		],
-		name: "winner",
+		name: "voters",
 		outputs: [
 			{
-				internalType: "uint256",
-				name: "option",
-				type: "uint256",
-			},
-			{
-				internalType: "uint256",
-				name: "votes",
-				type: "uint256",
+				internalType: "address",
+				name: "",
+				type: "address",
 			},
 		],
 		stateMutability: "view",

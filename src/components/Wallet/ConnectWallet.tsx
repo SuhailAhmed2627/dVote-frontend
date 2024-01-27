@@ -1,8 +1,10 @@
 import { BrowserProvider } from "ethers";
 import {
+	getElectionsByUser,
 	getTickets,
 	registerElection,
 	registerTicket,
+	voteWithTicket,
 } from "../../blockchain/api";
 
 const ConnectWallet = () => {
@@ -36,21 +38,17 @@ const ConnectWallet = () => {
 		// console.log(
 		// 	await registerElection(
 		// 		signer,
-		// 		"4",
+		// 		"10",
+		// 		"Nagessdasdh",
+		// 		"Nageshasdasd's GF Selection",
 		// 		["0x9c26306E0eA2969321efFeA97759f13e8edD2146"],
-		// 		1803347108,
-		// 		1816347108
+		// 		1706376050,
+		// 		1706377300
 		// 	)
 		// );
-		// console.log(
-		// 	await registerTicket(
-		// 		signer,
-		// 		"4",
-		// 		"0x0f1e7c3c8c2b6b7d7e7a2e6d0f1e7c3c8c2b6b7d",
-		// 		"0x0f1e7c3c8c2b6b7d7e7a2e6d0f1e7c3c8c2b6b7d"
-		// 	)
-		// );
+		// console.log(await registerTicket(signer, "10", "0", "0"));
 		// console.log(await getTickets(signer, "4"));
+		console.log(await voteWithTicket(signer, "10", "0", "0"));
 	}
 	return <div onClick={getAccount}>ConnectWallet</div>;
 };

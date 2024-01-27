@@ -6,7 +6,7 @@ import { contractID, contractABI } from "../../config";
 
 const TREE_DEPTH = 21;
 
-export function getMerkleTree(tickets: string[]) {
+export function _getMerkleTree(tickets: string[]) {
 	const merkleTree = new MerkleTree(TREE_DEPTH);
 	tickets.map((x) => merkleTree.addElement(x));
 	return merkleTree;
@@ -15,6 +15,8 @@ export function getMerkleTree(tickets: string[]) {
 export async function registerElection(
 	signer: JsonRpcSigner,
 	electionId: string,
+	electionName: string,
+	description: string,
 	voters: string[],
 	startVotingTime: string | number,
 	endVotingTime: string | number
@@ -24,10 +26,11 @@ export async function registerElection(
 		startVotingTime = now + Number(String(startVotingTime).slice(4));
 	if (String(endVotingTime).startsWith("now+"))
 		endVotingTime = now + Number(String(endVotingTime).slice(4));
-	console.log(contractID);
 	const anonymousVoting = new Contract(contractID, contractABI, signer);
 	await anonymousVoting.registerElection(
 		electionId,
+		electionName,
+		description,
 		voters,
 		startVotingTime,
 		endVotingTime
@@ -66,7 +69,7 @@ export async function voteWithTicket(
 
 	// get Merkle proof and Merkle root of ticket array
 	const index = tickets.indexOf(ticket);
-	const merkleTree = getMerkleTree(tickets);
+	const merkleTree = _getMerkleTree(tickets);
 	const merkleRoot = merkleTree.root();
 	const merkleProof = merkleTree.proof(index);
 
@@ -101,8 +104,11 @@ export async function voteWithTicket(
 	};
 }
 
-export async function getWinner(signer: JsonRpcSigner, electionId: string) {
-	const merkleRoot = await getMerkleRoot(electionId, signer);
+export async function getElectionStatus(
+	signer: JsonRpcSigner,
+	electionId: string
+) {
+	const merkleRoot = await _getMerkleRoot(electionId, signer);
 	const anonymousVoting = new Contract(contractID, contractABI, signer);
 	return anonymousVoting.getWinner(electionId, merkleRoot);
 }
@@ -116,8 +122,23 @@ export async function getTickets(
 	return tickets.map((x: JSON) => x.toString());
 }
 
-export async function getMerkleRoot(electionId: string, signer: JsonRpcSigner) {
+export async function _getMerkleRoot(
+	electionId: string,
+	signer: JsonRpcSigner
+) {
 	const tickets = await getTickets(signer, electionId);
-	const merkleTree = getMerkleTree(tickets);
+	const merkleTree = _getMerkleTree(tickets);
 	return merkleTree.root();
+}
+
+export async function getElectionsByUser(signer: JsonRpcSigner) {
+	const anonymousVoting = new Contract(contractID, contractABI, signer);
+	const elections = await anonymousVoting.getElectionsByUser();
+	return elections.map((x: JSON) => x.toString());
+}
+
+export async function getAllActiveElections(signer: JsonRpcSigner) {
+	const anonymousVoting = new Contract(contractID, contractABI, signer);
+	const elections = await anonymousVoting.getAllActiveElections();
+	return elections.map((x: JSON) => x.toString());
 }

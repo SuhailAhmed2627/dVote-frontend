@@ -1,21 +1,70 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { getUser } from "../../utils/helpers";
-import { AppShell, Center, Text } from "@mantine/core";
-import {
-	IconChartBar,
-	IconHistory,
-	IconHome,
-	IconUserCircle,
-} from "@tabler/icons-react";
+import { NavLink, Outlet } from "react-router-dom";
+import { AppShell, Button, Center, Text } from "@mantine/core";
+import { IconChartBar, IconHome, IconUserCircle } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { BrowserProvider } from "ethers";
+import { showNotification } from "../../utils/helpers";
 
 const Home = () => {
-	const user = getUser();
-	const navigate = useNavigate();
+	const [isConnected, setIsConnected] = useState(false);
 
-	// if (!user) {
-	// 	navigate("/login");
-	// 	return null;
-	// }
+	async function connect() {
+		if (!window.ethereum) return alert("Please install metamask");
+		const provider = new BrowserProvider(window.ethereum);
+		// It will prompt user for account connections if it isnt connected
+		await provider.send("eth_requestAccounts", []);
+		const signer = await provider.getSigner();
+		if (!signer) {
+			return;
+		}
+		const network = await provider.getNetwork();
+		if (Number(network.chainId) !== 323) {
+			try {
+				await window.ethereum.request({
+					method: "wallet_addEthereumChain",
+					params: [
+						{
+							chainId: "0x143",
+							rpcUrls: ["https://rpc.cosvm.net"],
+							chainName: "CosVM Mainnet",
+							nativeCurrency: {
+								name: "CVM",
+								symbol: "CVM",
+								decimals: 18,
+							},
+							blockExplorerUrls: ["https://explorer.cosvm.net/"],
+						},
+					],
+				});
+			} catch (error) {
+				showNotification("Error", "Unable to connect", "error");
+			}
+			return;
+		}
+		setIsConnected(true);
+		showNotification("Success", "Connected to CosVM", "success");
+	}
+
+	if (!isConnected) {
+		return (
+			<div className="h-screen w-screen flex flex-col justify-center items-center">
+				<div className="text-2xl font-bold">
+					<Button
+						variant="gradient"
+						gradient={{ from: "orange", to: "red" }}
+						classNames={{
+							label: "text-white",
+						}}
+						onClick={async () => {
+							await connect();
+						}}
+					>
+						Connect to CosVM
+					</Button>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<AppShell

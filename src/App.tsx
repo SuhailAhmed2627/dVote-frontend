@@ -12,6 +12,8 @@ import { queryClient } from "./utils/queries";
 import "./App.css";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/dates/styles.css";
+import "@mantine/charts/styles.css";
 
 const App = () => {
 	return (

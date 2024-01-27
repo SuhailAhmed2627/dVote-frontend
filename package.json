@@ -20,7 +20,9 @@
 	"license": "ISC",
 	"dependencies": {
 		"@emotion/react": "^11.10.5",
+		"@mantine/charts": "^7.5.0",
 		"@mantine/core": "^7.1.7",
+		"@mantine/dates": "^7.5.0",
 		"@mantine/hooks": "^7.1.7",
 		"@mantine/notifications": "^7.1.7",
 		"@metamask/sdk-react": "^0.14.2",
@@ -31,6 +33,7 @@
 		"@types/snarkjs": "^0.7.8",
 		"bn.js": "^5.2.1",
 		"chai": "^5.0.3",
+		"dayjs": "^1.11.10",
 		"ethers": "^6.10.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
@@ -39,6 +42,7 @@
 		"react-query": "^3.39.2",
 		"react-redux": "^8.0.5",
 		"react-router-dom": "^6.5.0",
+		"recharts": "2",
 		"redux-persist": "^6.0.0",
 		"snarkjs": "^0.7.3"
 	},
@@ -61,6 +65,7 @@
 		"tailwindcss": "^3.2.4",
 		"typescript": "^4.9.4",
 		"vite": "^4.0.2",
-		"vite-plugin-minify": "^1.5.2"
+		"vite-plugin-minify": "^1.5.2",
+		"vite-plugin-pwa": "^0.17.5"
 	}
 }

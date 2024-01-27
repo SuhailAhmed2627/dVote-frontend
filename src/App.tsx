@@ -24,7 +24,7 @@ const App = () => {
 			<Provider store={store}>
 				<PersistGate loading={null} persistor={persistor}>
 					<QueryClientProvider client={queryClient}>
-						<MantineProvider defaultColorScheme="dark" theme={theme}>
+						<MantineProvider theme={theme}>
 							<Notifications />
 							<Router />
 						</MantineProvider>

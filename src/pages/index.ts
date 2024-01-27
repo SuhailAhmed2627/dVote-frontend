@@ -6,3 +6,4 @@ export { default as Election } from "./Election/Election";
 export { default as Stats } from "./Stats/Stats";
 export { default as Profile } from "./Profile/Profile";
 export { default as Test } from "./Test/Test";
+export { default as Admin } from "./Admin/Admin";

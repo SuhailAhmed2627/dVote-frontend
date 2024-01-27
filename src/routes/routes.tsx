@@ -8,8 +8,10 @@ import {
 	Profile,
 	Election,
 	Test,
+	Admin,
 } from "../pages";
 import { Navigate, Route } from "react-router-dom";
+import { ADMIN_PANEL_URL } from "../../config";
 
 const SuspenseFallback = () => {
 	return <div>Loading...</div>;
@@ -50,5 +52,11 @@ export const routes: RouteType[] = [
 		element: <Test />,
 		title: "Test",
 		description: "Test Page of App",
+	},
+	{
+		path: `/${ADMIN_PANEL_URL}`,
+		element: <LazyRouteElement element={<Admin />} />,
+		title: "Admin Panel",
+		description: "Admin Panel of App",
 	},
 ];

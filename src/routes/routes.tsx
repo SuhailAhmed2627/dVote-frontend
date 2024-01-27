@@ -1,6 +1,7 @@
 import React from "react";
 import "./types.d";
-import { Landing, Signup, Login, Home } from "../pages";
+import { Landing, Home, Elections, Stats, Profile, Election } from "../pages";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 const SuspenseFallback = () => {
 	return <div>Loading...</div>;
@@ -22,21 +23,18 @@ export const routes: RouteType[] = [
 		description: "Landing Page of App",
 	},
 	{
-		path: "/login",
-		element: <Login />,
-		title: "Login",
-		description: "Login Page of App",
-	},
-	{
-		path: "/signup",
-		element: <Signup />,
-		title: "Signup",
-		description: "Signup Page of App",
-	},
-	{
 		path: "/home",
 		element: <Home />,
 		title: "Home",
 		description: "Home Page of App",
+		children: (
+			<>
+				<Route path="/home" element={<Navigate to="/home/elections" />} />
+				<Route path="/home/elections" element={<Elections />} />
+				<Route path="/home/elections/:electionId" element={<Election />} />
+				<Route path="/home/stats" element={<Stats />} />
+				<Route path="/home/profile" element={<Profile />} />
+			</>
+		),
 	},
 ];

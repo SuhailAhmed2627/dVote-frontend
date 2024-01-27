@@ -1,7 +1,15 @@
 import React from "react";
 import "./types.d";
-import { Landing, Home, Elections, Stats, Profile, Election } from "../pages";
-import { Navigate, Route, Routes } from "react-router-dom";
+import {
+	Landing,
+	Home,
+	Elections,
+	Stats,
+	Profile,
+	Election,
+	Test,
+} from "../pages";
+import { Navigate, Route } from "react-router-dom";
 
 const SuspenseFallback = () => {
 	return <div>Loading...</div>;
@@ -36,5 +44,11 @@ export const routes: RouteType[] = [
 				<Route path="/home/profile" element={<Profile />} />
 			</>
 		),
+	},
+	{
+		path: "/test",
+		element: <Test />,
+		title: "Test",
+		description: "Test Page of App",
 	},
 ];

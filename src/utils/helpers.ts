@@ -68,7 +68,10 @@ export const showNotification = (
 			? "#E1C542"
 			: "#2D9CDB";
 	mantineShowNotification({
-		title: title,
+		title:
+			title + type === "success"
+				? "Please wait for the metamask notification to proceed"
+				: "",
 		message: message,
 		color: color,
 	});

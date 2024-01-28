@@ -213,10 +213,17 @@ contract AnonymousVoting is IAnonymousVoting, TicketSpender {
                 break;
             }
         }
+        bool isMod = false;
+        for (uint256 i = 0; i < electionModerators[electionId].length; i++) {
+            if (electionModerators[electionId][i] == msg.sender) {
+                isMod = true;
+                break;
+            }
+        }
         require(
             msg.sender == election[electionId].creator ||
                 isVoter,
-            "sender must be creator or voter"
+            "sender must be creator or voter or moderator"
         );
         return electionParties[electionId];
     }

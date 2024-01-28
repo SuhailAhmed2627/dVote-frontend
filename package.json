@@ -11,6 +11,7 @@
 		"build": "tsc && vite build",
 		"dev:server": "cd zkp && npm start",
 		"serve": "vite preview",
+		"install:deps": "yarn && cd zkp && npm ci",
 		"deploy:cosvm": "yarn hardhat compile && yarn hardhat deploy --network cosvm"
 	},
 	"lint-staged": {

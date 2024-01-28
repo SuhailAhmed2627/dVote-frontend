@@ -1,4 +1,5 @@
 import { Button, Center, Text } from "@mantine/core";
+import { Link } from "react-router-dom";
 
 const Landing = () => {
 	return (
@@ -10,6 +11,8 @@ const Landing = () => {
 				YOURS TOO!
 			</Text>
 			<Button
+				component={Link}
+				to="/home"
 				size="xl"
 				variant="gradient"
 				gradient={{ from: "orange", to: "yellow", deg: 90 }}
@@ -18,7 +21,7 @@ const Landing = () => {
 					label: "text-white",
 				}}
 			>
-				LOGIN
+				VOTE NOW
 			</Button>
 		</Center>
 	);

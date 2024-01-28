@@ -1,6 +1,6 @@
-import { plonk } from "snarkjs";
+import { CircuitSignals, PlonkProof, plonk, PublicSignals } from "snarkjs";
 
-export async function createProof(pub: any) {
+export async function createProof(pub: CircuitSignals) {
 	return await plonk.fullProve(
 		pub,
 		"./contracts/snark_data/ticket_spender_js/ticket_spender.wasm",
@@ -8,9 +8,8 @@ export async function createProof(pub: any) {
 	);
 }
 
-export async function getSoliditySnark(proof: any, pub: any) {
+export async function getSoliditySnark(proof: PlonkProof, pub: PublicSignals) {
 	const callargs = await plonk.exportSolidityCallData(proof, pub);
-	console.log("Proof CallArgs: ", callargs);
-	// regex to remove all special characters
-	return callargs.slice(2, callargs.indexOf(",") - 1);
+	console.log(callargs);
+	return callargs.slice(0, callargs.indexOf(","));
 }

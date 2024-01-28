@@ -14,10 +14,10 @@ export function _getMerkleTree(tickets: string[]) {
 
 export async function registerElection(
 	signer: JsonRpcSigner,
-	electionId: string,
 	electionName: string,
 	description: string,
 	voters: string[],
+	parties: string[],
 	startVotingTime: string | number,
 	endVotingTime: string | number
 ) {
@@ -28,10 +28,10 @@ export async function registerElection(
 		endVotingTime = now + Number(String(endVotingTime).slice(4));
 	const anonymousVoting = new Contract(contractID, contractABI, signer);
 	await anonymousVoting.registerElection(
-		electionId,
 		electionName,
 		description,
 		voters,
+		parties,
 		startVotingTime,
 		endVotingTime
 	);
@@ -54,6 +54,33 @@ export async function registerTicket(
 	};
 }
 
+export async function addModerator(
+	signer: JsonRpcSigner,
+	electionId: string,
+	moderatorID: string
+) {
+	const anonymousVoting = new Contract(contractID, contractABI, signer);
+	await anonymousVoting.addModerator(electionId, moderatorID);
+}
+
+export async function removeModerator(
+	signer: JsonRpcSigner,
+	electionId: string,
+	moderatorID: string
+) {
+	const anonymousVoting = new Contract(contractID, contractABI, signer);
+	await anonymousVoting.removeModerator(electionId, moderatorID);
+}
+
+export async function addVoter(
+	signer: JsonRpcSigner,
+	electionId: string,
+	voterID: string
+) {
+	const anonymousVoting = new Contract(contractID, contractABI, signer);
+	await anonymousVoting.addVoter(electionId, voterID);
+}
+
 export async function voteWithTicket(
 	signer: JsonRpcSigner,
 	electionId: string,
@@ -63,12 +90,15 @@ export async function voteWithTicket(
 	// get ticket and serial
 	const ticket: string = postreidon([secret, option]);
 	const serial: string = postreidon([secret, ticket]);
+	console.log(ticket, serial);
 
 	// get tickets from the smart contract
 	const tickets: string[] = await getTickets(signer, electionId);
 
 	// get Merkle proof and Merkle root of ticket array
 	const index = tickets.indexOf(ticket);
+	console.log(tickets);
+	if (index === -1) throw new Error("Ticket not found");
 	const merkleTree = _getMerkleTree(tickets);
 	const merkleRoot = merkleTree.root();
 	const merkleProof = merkleTree.proof(index);
@@ -88,6 +118,7 @@ export async function voteWithTicket(
 		zksnark.proof,
 		zksnark.publicSignals
 	);
+	console.log(solproof);
 
 	// call the contract to spend the ticket
 	const anonymousVoting = new Contract(contractID, contractABI, signer);
@@ -142,4 +173,13 @@ export async function getAllActiveElections(signer: JsonRpcSigner) {
 	const anonymousVoting = new Contract(contractID, contractABI, signer);
 	const elections = await anonymousVoting.getAllActiveElections();
 	return elections.map((x: JSON) => x.toString());
+}
+
+export async function getElectionParties(
+	signer: JsonRpcSigner,
+	electionId: string
+) {
+	const anonymousVoting = new Contract(contractID, contractABI, signer);
+	const parties = await anonymousVoting.getElectionParties(electionId);
+	return parties.map((x: JSON) => x.toString());
 }

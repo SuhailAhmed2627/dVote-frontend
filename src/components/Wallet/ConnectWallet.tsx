@@ -1,5 +1,6 @@
 import { BrowserProvider } from "ethers";
 import {
+	getElectionParties,
 	getElectionsByUser,
 	getTickets,
 	registerElection,
@@ -38,17 +39,19 @@ const ConnectWallet = () => {
 		// console.log(
 		// 	await registerElection(
 		// 		signer,
-		// 		"10",
-		// 		"Nagessdasdh",
-		// 		"Nageshasdasd's GF Selection",
+		// 		"Vignes",
+		// 		"Ur mom",
 		// 		["0x9c26306E0eA2969321efFeA97759f13e8edD2146"],
-		// 		1706376050,
-		// 		1706377300
+		// 		["Ramesh", "Nagesh", "Nagesh's GF", "Panama canal"],
+		// 		"now+100",
+		// 		"now+4000"
 		// 	)
 		// );
-		// console.log(await registerTicket(signer, "10", "0", "0"));
-		// console.log(await getTickets(signer, "4"));
-		console.log(await voteWithTicket(signer, "10", "0", "0"));
+		//console.log(await registerTicket(signer, "12", "111", "1"));
+		console.log(await getTickets(signer, "6"));
+		//console.log(await voteWithTicket(signer, "12", "111", "1"));
+		// console.log(await getElectionsByUser(signer));
+		// console.log(await getElectionParties(signer, "0"));
 	}
 	return <div onClick={getAccount}>ConnectWallet</div>;
 };

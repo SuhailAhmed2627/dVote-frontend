@@ -1,5 +1,6 @@
 node_modules/
 dist/
+zkt/node_modules/
 yarn-error.log
 snark_data/
 config.ts

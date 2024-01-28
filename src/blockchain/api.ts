@@ -118,6 +118,7 @@ export async function getTickets(
 	electionId: string
 ): Promise<string[]> {
 	const anonymousVoting = new Contract(contractID, contractABI, signer);
+	// Its int in old repo
 	const tickets = await anonymousVoting.getTickets(electionId);
 	return tickets.map((x: JSON) => x.toString());
 }

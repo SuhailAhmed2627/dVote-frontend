@@ -31,7 +31,7 @@ Clone the repository to your local device and
 1. Install the required dependencies:
 
 ```bash
-yarn install:dep
+yarn install:deps
 ```
 
 2.
@@ -39,19 +39,18 @@ yarn install:dep
 ```bash
 cp config.example.ts config.ts
 ```
-
 and make any necessary changes.
 
-3. Start the Vite Development Server in developer mode:
-
-```bash
-yarn start
-```
-
-4. Deploy the smart contracts On CosVM:
+3. Deploy the smart contracts On CosVM:
 
 ```bash
 yarn deploy:cosvm
+```
+
+4. Start the Vite Development Server in developer mode:
+
+```bash
+yarn start
 ```
 
 The server should be running at your 127.0.0.1 port 3000 (or the port specified in `config.ts`).

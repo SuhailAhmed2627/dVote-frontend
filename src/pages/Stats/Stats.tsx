@@ -1,40 +1,9 @@
 import { BarChart } from "@mantine/charts";
 import { Center, Select } from "@mantine/core";
 import { useEffect, useState } from "react";
-import {
-	getAllActiveElections,
-	getElectionParties,
-	getElectionsByUser,
-} from "../../blockchain/api";
+import { getElectionParties, getElectionsByUser } from "../../blockchain/api";
 import { getUser } from "../../utils/helpers";
 import { useQuery } from "react-query";
-
-const data = [
-	{
-		candidate: "Sarvesh",
-		votes: 100,
-	},
-	{
-		candidate: "Suraj",
-		votes: 200,
-	},
-	{
-		candidate: "Vishal",
-		votes: 300,
-	},
-	{
-		candidate: "Rahul",
-		votes: 400,
-	},
-	{
-		candidate: "Rohit",
-		votes: 500,
-	},
-	{
-		candidate: "Suhail",
-		votes: 700,
-	},
-];
 
 const processCandData = (data: string[]) => {
 	const splitData = data.map((a) => a.split(","));
@@ -67,7 +36,8 @@ const Stats = () => {
 			});
 			// Remove duplicates
 			const unique = meow.filter(
-				(v, i, a) => a.findIndex((t: any) => t.id === v.id) === i
+				(v: any, i: any, a: any) =>
+					a.findIndex((t: any) => t.id === v.id) === i
 			);
 			return unique;
 		},
@@ -78,7 +48,7 @@ const Stats = () => {
 		if (!electionId) return;
 		const getNew = async () => {
 			const newData = await getElectionParties(user, electionId);
-			setCurrent(processCandData(newData));
+			setCurrent(processCandData(newData) as any);
 		};
 		getNew();
 	}, [electionId]);

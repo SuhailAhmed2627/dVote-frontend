@@ -7,11 +7,17 @@ import {
 	Center,
 	Container,
 } from "@mantine/core";
-import { useQueries, useQuery } from "react-query";
+import { useMutation, useQueries, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getUser } from "../../utils/helpers";
-import { getElectionParties, getElectionsByUser } from "../../blockchain/api";
+import {
+	getElectionParties,
+	getElectionsByUser,
+	registerTicket,
+	voteWithTicket,
+} from "../../blockchain/api";
 import { JsonRpcSigner } from "ethers";
+import { useState } from "react";
 
 // const electionsDetails = {
 // 	id: "1",
@@ -78,16 +84,35 @@ const processCandData = (data: string[]) => {
 	return newData;
 };
 
+const makeid = (length: number) => {
+	let result = "";
+	const characters = "0123456789";
+	const charactersLength = characters.length;
+	for (let i = 0; i < length; i++) {
+		result += characters.charAt(Math.floor(Math.random() * charactersLength));
+	}
+	return result;
+};
+
 const vote = async (
 	electionId: string,
 	candidateId: string,
 	user: JsonRpcSigner
 ) => {
-	// TODO: Implement voting
+	const secret = makeid(16);
+	const ticketRes = await registerTicket(
+		user,
+		electionId,
+		secret,
+		candidateId
+	);
+	const voteRes = await voteWithTicket(user, electionId, secret, candidateId);
+	console.log(ticketRes, voteRes);
 };
 
 const Election = () => {
 	const { electionId } = useParams();
+	const [voted, setVoted] = useState(false);
 	const user = getUser();
 	const [getElectionDetailsQuery, getElectionPartiesQuery] = useQueries([
 		{
@@ -116,6 +141,35 @@ const Election = () => {
 			},
 		},
 	]);
+	const voteMutation = useMutation({
+		mutationFn: async ({
+			electionId,
+			candidateId,
+			user,
+		}: {
+			electionId: string;
+			candidateId: string;
+			user: JsonRpcSigner;
+		}) => {
+			const secret = makeid(20);
+			console.log(secret, candidateId);
+			const ticketRes = await registerTicket(
+				user,
+				electionId,
+				secret,
+				candidateId
+			);
+			const voteRes = await voteWithTicket(
+				user,
+				electionId,
+				secret,
+				candidateId
+			);
+		},
+		onSuccess: () => {
+			setVoted(true);
+		},
+	});
 
 	if (!electionId) {
 		return <div>No election id provided</div>;
@@ -152,8 +206,14 @@ const Election = () => {
 			</Table.Td>
 			<Table.Td align="right">
 				<Button
+					loading={voteMutation.isLoading}
+					disabled={voteMutation.isLoading}
 					onClick={() => {
-						vote(electionId, item.id, user);
+						voteMutation.mutate({
+							electionId: electionId,
+							candidateId: item.id,
+							user: user,
+						});
 					}}
 					color="orange"
 					variant="light"
@@ -173,7 +233,7 @@ const Election = () => {
 				<Text className="text-sm mt-2 pr-10">
 					{getElectionDetailsQuery.data.description}
 				</Text>
-				{false ? (
+				{voted ? (
 					<Text className="text-lg font-semibold my-10 pr-10 text-center">
 						You have already voted in this election.
 					</Text>

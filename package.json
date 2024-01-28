@@ -4,10 +4,12 @@
 	"description": "Client Repository of App",
 	"private": true,
 	"scripts": {
+		"start": "concurrently \"yarn dev\" \"yarn dev:server\"",
 		"lint": "eslint --ext .js,.jsx,.ts,.tsx .",
 		"format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|jsx|tsx|json)\"",
 		"dev": "vite",
 		"build": "tsc && vite build",
+		"dev:server": "cd zkp && npm start",
 		"serve": "vite preview",
 		"deploy:cosvm": "yarn hardhat compile && yarn hardhat deploy --network cosvm"
 	},
@@ -44,6 +46,7 @@
 		"@types/snarkjs": "^0.7.8",
 		"bn.js": "^5.2.1",
 		"chai": "^4.3.7",
+		"concurrently": "^8.2.2",
 		"dayjs": "^1.11.10",
 		"dotenv": "^16.4.1",
 		"ethers": "^6.10.0",

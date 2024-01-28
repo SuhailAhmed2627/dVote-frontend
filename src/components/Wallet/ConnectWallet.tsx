@@ -36,20 +36,20 @@ const ConnectWallet = () => {
 			});
 		}
 
-		// console.log(
-		// 	await registerElection(
-		// 		signer,
-		// 		"Vignes",
-		// 		"Ur mom",
-		// 		["0x9c26306E0eA2969321efFeA97759f13e8edD2146"],
-		// 		["Ramesh", "Nagesh", "Nagesh's GF", "Panama canal"],
-		// 		"now+100",
-		// 		"now+4000"
-		// 	)
-		// );
+		console.log(
+			await registerElection(
+				signer,
+				"Vignes",
+				"Ur mom",
+				["0x9c26306E0eA2969321efFeA97759f13e8edD2146"],
+				["Ramesh", "Nagesh", "Nagesh's GF", "Panama canal"],
+				"now+100",
+				"now+4000"
+			)
+		);
 		//console.log(await registerTicket(signer, "5", "12345678910", "1"));
 		// console.log(await getTickets(signer, "6"));
-		console.log(await voteWithTicket(signer, "5", "12345678910", "1"));
+		//console.log(await voteWithTicket(signer, "5", "12345678910", "1"));
 		// console.log(await getElectionsByUser(signer));
 		// console.log(await getElectionParties(signer, "0"));
 	}

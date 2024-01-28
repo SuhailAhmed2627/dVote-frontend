@@ -12,6 +12,11 @@ export function _getMerkleTree(tickets: string[]) {
 	return merkleTree;
 }
 
+export async function _deployContract(ethers: any, name: string) {
+	const AnonymousVoting = await ethers.deployContract(name);
+	return AnonymousVoting;
+}
+
 export async function registerElection(
 	signer: JsonRpcSigner,
 	electionName: string,
@@ -138,6 +143,19 @@ export async function getElectionStatus(
 	const merkleRoot = await _getMerkleRoot(electionId, signer);
 	const anonymousVoting = new Contract(contractID, contractABI, signer);
 	return anonymousVoting.getWinner(electionId, merkleRoot);
+}
+
+export async function getVotingHistoryByParty(
+	signer: JsonRpcSigner,
+	electionId: string,
+	party: string
+) {
+	const anonymousVoting = new Contract(contractID, contractABI, signer);
+	const history = await anonymousVoting.getVotingHistoryByParty(
+		electionId,
+		party
+	);
+	return history.map((x: JSON) => x.toString());
 }
 
 export async function getTickets(

@@ -7,4 +7,6 @@ typechain-types/
 config.ts
 powersOfTau28_hez_final_16.ptau
 circom
+artifacts/
+cache/
 .env

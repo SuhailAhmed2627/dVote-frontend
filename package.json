@@ -8,7 +8,8 @@
 		"format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|jsx|tsx|json)\"",
 		"dev": "vite",
 		"build": "tsc && vite build",
-		"serve": "vite preview"
+		"serve": "vite preview",
+		"deploy:cosvm": "yarn hardhat compile && yarn hardhat deploy --network cosvm"
 	},
 	"lint-staged": {
 		"*.{ts,tsx}": [
@@ -26,15 +27,28 @@
 		"@mantine/hooks": "^7.1.7",
 		"@mantine/notifications": "^7.1.7",
 		"@metamask/sdk-react": "^0.14.2",
+		"@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+		"@nomicfoundation/hardhat-ethers": "^3.0.0",
+		"@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+		"@nomicfoundation/hardhat-toolbox": "^4.0.0",
+		"@nomicfoundation/hardhat-verify": "^2.0.0",
+		"@nomiclabs/hardhat-truffle5": "^2.0.7",
+		"@nomiclabs/hardhat-web3": "^2.0.0",
 		"@reduxjs/toolkit": "^1.9.1",
 		"@tabler/icons-react": "^2.10.0",
+		"@typechain/ethers-v6": "^0.5.0",
+		"@typechain/hardhat": "^9.0.0",
 		"@types/bn.js": "^5.1.5",
 		"@types/chai": "^4.3.11",
+		"@types/mocha": ">=9.1.0",
 		"@types/snarkjs": "^0.7.8",
 		"bn.js": "^5.2.1",
-		"chai": "^5.0.3",
+		"chai": "^4.3.7",
 		"dayjs": "^1.11.10",
+		"dotenv": "^16.4.1",
 		"ethers": "^6.10.0",
+		"hardhat": "^2.19.4",
+		"hardhat-gas-reporter": "^1.0.8",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-error-boundary": "^3.1.4",
@@ -44,7 +58,10 @@
 		"react-router-dom": "^6.5.0",
 		"recharts": "2",
 		"redux-persist": "^6.0.0",
-		"snarkjs": "^0.7.3"
+		"snarkjs": "^0.7.3",
+		"solidity-coverage": "^0.8.1",
+		"ts-node": "^10.9.2",
+		"typechain": "^8.3.0"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.26",

@@ -62,7 +62,7 @@ contract AnonymousVoting is IAnonymousVoting, TicketSpender {
 
     modifier afterVotingPeriod(uint256 electionId) {
         require(
-            block.timestamp > votingPeriod[electionId].end,
+            block.timestamp < votingPeriod[electionId].end,
             "should be after the voting period"
         );
         _;
@@ -224,7 +224,7 @@ contract AnonymousVoting is IAnonymousVoting, TicketSpender {
     function registerTicket(
         uint256 electionId,
         uint256 ticket
-    ) external override beforeVotingPeriod(electionId) onlyVoters(electionId) {
+    ) external override duringVotingPeriod(electionId) onlyVoters(electionId) {
         require(election[electionId].exists, "election not registered");
         require(
             !registered[electionId][msg.sender],
@@ -237,7 +237,7 @@ contract AnonymousVoting is IAnonymousVoting, TicketSpender {
     function getElectionStatus(
         uint256 electionId,
         uint256 _merkleRoot
-    ) external view override afterVotingPeriod(electionId) returns (Party[] memory) {
+    ) external view override returns (Party[] memory) {
         require(election[electionId].exists, "election not registered");
         Party[] memory parties = new Party[](electionParties[electionId].length);
         for (uint256 i = 0; i < electionParties[electionId].length; i++) {

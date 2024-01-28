@@ -1,12 +1,18 @@
 import dotenv from "dotenv";
-import { HardhatUserConfig } from "hardhat/config";
+import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomiclabs/hardhat-truffle5";
 import "@nomicfoundation/hardhat-toolbox";
 import "@nomiclabs/hardhat-web3";
-import "hardhat-gas-reporter";
+import "@nomicfoundation/hardhat-ethers";
+import { _deployContract } from "./src/blockchain/api";
 
-const accounts = process.env.PRIVATE_KEYS?.split(",");
 dotenv.config();
+const accounts = process.env.PRIVATE_KEYS?.split(",");
+
+task("deploy", "Deploy a contract").setAction(async (_, { ethers }) => {
+	const contract = await _deployContract(ethers, "AnonymousVoting");
+	console.log(`contract address: ${contract.target}`);
+});
 
 const config: HardhatUserConfig = {
 	solidity: {

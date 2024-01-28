@@ -1,4 +1,4 @@
-export const contractID = "0xcfFC37E2C4dc670D76438dD50340b84F8E0dA78d";
+export const contractID = "0x8F52A850EeE20A29c447DD8EF1c6dD066452e899";
 export const PORT_CLIENT = 3000;
 export const PORT_SERVER = 3001;
 export const ENV: "DEV" | "PROD" = "DEV";

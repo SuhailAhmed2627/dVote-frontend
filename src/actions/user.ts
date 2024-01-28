@@ -1,21 +1,9 @@
-import {  LOGIN_SUCCESS } from "./types";
+import { JsonRpcSigner } from "ethers";
+import { LOGIN_SUCCESS } from "./types";
 
-
-export const loginSuccess = (data: {
-	token: {
-		jwt_token: string;
-	};
-	user: {
-		name: string;
-		email: string;
-	};
-}) => {
+export const loginSuccess = (data: JsonRpcSigner) => {
 	return {
 		type: LOGIN_SUCCESS,
-		payload: {
-			name: data.user.name,
-			email: data.user.email,
-			jwt: data.token.jwt_token,
-		},
+		payload: data,
 	};
 };

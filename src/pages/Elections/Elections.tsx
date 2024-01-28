@@ -1,6 +1,9 @@
 import { Text, Center } from "@mantine/core";
 import { IconRubberStamp } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
+import { getAllActiveElections } from "../../blockchain/api";
+import { getUser } from "../../utils/helpers";
+import { useQuery } from "react-query";
 
 const electionRes = [
 	{
@@ -23,10 +26,61 @@ const electionRes = [
 	},
 ];
 
+const processElectionData = (data: string[]) => {
+	const splitData = data.map((a) => a.split(","));
+
+	const newData = splitData.map((a) => {
+		return {
+			id: a[0],
+			name: a[1],
+			description: a[2],
+		};
+	});
+
+	return newData;
+};
+
 const Elections = () => {
+	const user = getUser();
+	const getElectionsQuery = useQuery({
+		queryKey: "elections",
+		queryFn: async () => {
+			if (!user) return;
+			const elections = await getAllActiveElections(user);
+			const processed = processElectionData(elections);
+			// Remove empty elections
+			const filtered = processed.filter((election) => election.name !== "");
+			return filtered;
+		},
+	});
+
+	if (getElectionsQuery.isLoading) {
+		return (
+			<Center className="h-full w-full flex flex-col justify-center items-center gap-10">
+				<Text className="text-2xl font-semibold">Loading...</Text>
+			</Center>
+		);
+	}
+
+	if (getElectionsQuery.isError) {
+		return (
+			<Center className="h-full w-full flex flex-col justify-center items-center gap-10">
+				<Text className="text-2xl font-semibold">Error</Text>
+			</Center>
+		);
+	}
+
+	if (!getElectionsQuery.data) {
+		return (
+			<Center className="h-full w-full flex flex-col justify-center items-center gap-10">
+				<Text className="text-2xl font-semibold">No data</Text>
+			</Center>
+		);
+	}
+
 	return (
-		<Center className="h-full w-full flex flex-col justify-center items-center gap-10">
-			{electionRes.map((election) => (
+		<Center className="h-full w-full flex flex-col justify-center items-center gap-10 pt-32 pb-10 overflow-y-auto">
+			{getElectionsQuery.data.map((election) => (
 				<Center
 					component={Link}
 					to={`/home/elections/${election.id}`}

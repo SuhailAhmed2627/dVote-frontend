@@ -1,9 +1,17 @@
-import { Button, Center, Group, Text, TextInput } from "@mantine/core";
+import {
+	Button,
+	Center,
+	FileButton,
+	Group,
+	Text,
+	TextInput,
+} from "@mantine/core";
 import { useCallback, useEffect, useState } from "react";
 import { showNotification } from "../../utils/helpers";
 import { BrowserProvider, ethers, randomBytes } from "ethers";
 import { registerElection } from "../../blockchain/api";
 import { DateInput } from "@mantine/dates";
+import { use } from "chai";
 
 const Admin = () => {
 	const [nameOfElection, setNameOfElection] = useState("");
@@ -19,19 +27,45 @@ const Admin = () => {
 	const [isConnected, setIsConnected] = useState(false);
 	const [startDate, setStartDate] = useState<null | Date>(new Date());
 	const [endDate, setEndDate] = useState<null | Date>(new Date());
+	const [file, setFile] = useState<File | null>(null);
 
 	const createElection = useCallback(async () => {
 		if (!window.ethereum) return alert("Please install metamask");
 		const provider = new BrowserProvider(window.ethereum);
 		const signer = await provider.getSigner();
-		// registerElection(
-		// 	signer,
-		// 	nameOfElection,
-		// 	descriptionOfElection,
-		// 	candidates,
-		// 	startDate,
-		// 	endDate
-		// );
+		if (!signer) {
+			return;
+		}
+		if (!nameOfElection) {
+			return showNotification(
+				"Error",
+				"Name of election is required",
+				"error"
+			);
+		}
+		if (!descriptionOfElection) {
+			return showNotification(
+				"Error",
+				"Description of election is required",
+				"error"
+			);
+		}
+		if (!startDate) {
+			return showNotification("Error", "Start date is required", "error");
+		}
+		if (!endDate) {
+			return showNotification("Error", "End date is required", "error");
+		}
+		const myAddress = await signer.getAddress();
+		await registerElection(
+			signer,
+			nameOfElection,
+			descriptionOfElection,
+			[myAddress],
+			candidates.map((candidate) => candidate.name),
+			parseInt((startDate.getTime() / 1000).toFixed(0)),
+			parseInt((endDate.getTime() / 1000).toFixed(0))
+		);
 		showNotification("Success", "Election created", "success");
 	}, [nameOfElection, descriptionOfElection, candidates, numberOfCandidates]);
 
@@ -71,6 +105,21 @@ const Admin = () => {
 		setIsConnected(true);
 		showNotification("Success", "Connected to CosVM", "success");
 	}
+
+	useEffect(() => {
+		// get voters from csv file
+		if (!file) return;
+		const reader = new FileReader();
+		reader.readAsText(file);
+		reader.onload = () => {
+			const text = reader.result;
+			if (!text) return;
+			const split = text.toString().split("\n");
+			const removeWindows = split.map((a) => a.replace("\r", ""));
+			const filtered = removeWindows.filter((a) => a !== "");
+			setVoters(filtered);
+		};
+	}, [file]);
 
 	if (!isConnected) {
 		return (
@@ -188,6 +237,25 @@ const Admin = () => {
 							-
 						</Button>
 					</Group>
+					<FileButton onChange={setFile}>
+						{(props) => (
+							<Button
+								variant="gradient"
+								gradient={{ from: "orange", to: "red" }}
+								classNames={{
+									label: "text-white",
+								}}
+								{...props}
+							>
+								Upload Voters CSV
+							</Button>
+						)}
+					</FileButton>
+					{file && (
+						<Text size="sm" ta="center" mt="sm">
+							Picked file: {file.name}
+						</Text>
+					)}
 					<Button
 						classNames={{
 							label: "text-white",

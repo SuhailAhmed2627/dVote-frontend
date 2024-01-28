@@ -4,9 +4,12 @@ import { IconChartBar, IconHome, IconUserCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { BrowserProvider } from "ethers";
 import { showNotification } from "../../utils/helpers";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../actions/user";
 
 const Home = () => {
 	const [isConnected, setIsConnected] = useState(false);
+	const dispatch = useDispatch();
 
 	async function connect() {
 		if (!window.ethereum) return alert("Please install metamask");
@@ -17,6 +20,7 @@ const Home = () => {
 		if (!signer) {
 			return;
 		}
+		dispatch(loginSuccess(signer));
 		const network = await provider.getNetwork();
 		if (Number(network.chainId) !== 323) {
 			try {
@@ -74,7 +78,11 @@ const Home = () => {
 			}}
 		>
 			<AppShell.Header className="bg-white shadow-sm border-b border-gray-200">
-				<div>dVote</div>
+				<Center className="h-full w-full justify-start px-5">
+					<Text className="text-2xl font-semibold text-orange-600">
+						dVote
+					</Text>
+				</Center>
 			</AppShell.Header>
 
 			<AppShell.Main className="h-[100dvh]">

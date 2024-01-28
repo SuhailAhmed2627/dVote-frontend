@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 import { User } from "../type";
 import { BACKEND_URL } from "../../config";
 import { showNotification as mantineShowNotification } from "@mantine/notifications";
+import { JsonRpcSigner } from "ethers";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getUser = (): User => useSelector((state: any) => state.user);
+export const getUser = (): JsonRpcSigner =>
+	useSelector((state: any) => state.user);
 
 interface DatafetchParams {
 	url: string;

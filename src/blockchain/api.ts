@@ -101,7 +101,6 @@ export async function voteWithTicket(
 
 	// get Merkle proof and Merkle root of ticket array
 	const index = tickets.indexOf(ticket);
-	console.log(tickets);
 	if (index === -1) throw new Error("Ticket not found");
 	const merkleTree = _getMerkleTree(tickets);
 	const merkleRoot = merkleTree.root();
@@ -141,7 +140,7 @@ export async function getElectionStatus(
 ) {
 	const merkleRoot = await _getMerkleRoot(electionId, signer);
 	const anonymousVoting = new Contract(contractID, contractABI, signer);
-	return anonymousVoting.getWinner(electionId, merkleRoot);
+	return anonymousVoting.getElectionStatus(electionId, merkleRoot);
 }
 
 export async function getVotingHistoryByParty(

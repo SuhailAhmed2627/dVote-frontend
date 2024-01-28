@@ -7,7 +7,6 @@ import {
 	Stats,
 	Profile,
 	Election,
-	Test,
 	Admin,
 } from "../pages";
 import { Navigate, Route } from "react-router-dom";
@@ -46,12 +45,6 @@ export const routes: RouteType[] = [
 				<Route path="/home/profile" element={<Profile />} />
 			</>
 		),
-	},
-	{
-		path: "/test",
-		element: <Test />,
-		title: "Test",
-		description: "Test Page of App",
 	},
 	{
 		path: `/${ADMIN_PANEL_URL}`,

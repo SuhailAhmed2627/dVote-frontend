@@ -1,21 +1,24 @@
 import { BarChart } from "@mantine/charts";
 import { Center, Select } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { getElectionParties, getElectionsByUser } from "../../blockchain/api";
+import { getElectionStatus, getElectionsByUser } from "../../blockchain/api";
 import { getUser } from "../../utils/helpers";
 import { useQuery } from "react-query";
 
-const processCandData = (data: string[]) => {
-	const splitData = data.map((a) => a.split(","));
+const processCandData = (a: any) => {
+	a = a.toString().split(",");
 
-	const newData = splitData.map((a) => {
-		return {
-			candidate: a[1],
-			votes: parseInt(a[3]),
+	const res = [];
+
+	for (let i = 0; i < a.length; i += 4) {
+		const data = {
+			candidate: a[i + 1],
+			votes: a[i + 3],
 		};
-	});
+		res.push(data);
+	}
 
-	return newData;
+	return res;
 };
 
 const Stats = () => {
@@ -46,12 +49,14 @@ const Stats = () => {
 	useEffect(() => {
 		if (!user) return;
 		if (!electionId) return;
-		const getNew = async () => {
-			const newData = await getElectionParties(user, electionId);
-			console.log(newData);
+		const timeout = setInterval(async () => {
+			const newData = await getElectionStatus(user, electionId);
 			setCurrent(processCandData(newData) as any);
+		}, 1000);
+
+		return () => {
+			clearInterval(timeout);
 		};
-		getNew();
 	}, [electionId]);
 
 	if (getElectionsQuery.isLoading) {

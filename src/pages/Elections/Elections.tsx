@@ -48,7 +48,6 @@ const Elections = () => {
 			if (!user) return;
 			const elections = await getAllActiveElections(user);
 			const processed = processElectionData(elections);
-			console.log(processed);
 			const filtered = processed.filter((election) => election.name !== "");
 			return filtered;
 		},

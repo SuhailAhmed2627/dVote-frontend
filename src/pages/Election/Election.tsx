@@ -107,7 +107,6 @@ const vote = async (
 		candidateId
 	);
 	const voteRes = await voteWithTicket(user, electionId, secret, candidateId);
-	console.log(ticketRes, voteRes);
 };
 
 const Election = () => {
@@ -124,7 +123,6 @@ const Election = () => {
 				const election = processElectionData(elections).find(
 					(election) => election.id === electionId
 				);
-				console.log(election);
 				return election;
 			},
 		},
@@ -137,7 +135,6 @@ const Election = () => {
 					electionId as string
 				);
 				const s = processCandData(parties);
-				console.log(s);
 				return s;
 			},
 		},
@@ -153,7 +150,6 @@ const Election = () => {
 			user: JsonRpcSigner;
 		}) => {
 			const secret = makeid(20);
-			console.log(secret, candidateId);
 			const ticketRes = await registerTicket(
 				user,
 				electionId,
@@ -171,7 +167,7 @@ const Election = () => {
 				const voteRes = await voteWithTicket(
 					user,
 					electionId,
-					"06200267391764307219",
+					secret,
 					candidateId
 				);
 				if (voteRes) {
@@ -181,7 +177,7 @@ const Election = () => {
 					showNotification("Error", "Unable to vote", "error");
 				}
 				setIsLoading(false);
-			}, 10000);
+			}, 20000);
 		},
 	});
 

@@ -9,6 +9,7 @@ struct VotingPeriod {
     uint256 end;
 }
 
+
 contract AnonymousVoting is IAnonymousVoting, TicketSpender {
     // Total number of elections
     uint256 public electionCount;
@@ -21,6 +22,8 @@ contract AnonymousVoting is IAnonymousVoting, TicketSpender {
     mapping(uint256 => Party[]) public electionParties;
     // Voter Election Map
     mapping(address => uint256[]) public voterElectionMap;
+    // Vote History Time Series (electionId, Party, VoteBlock)
+    mapping(uint256 => mapping(uint256 => VoteBlock[])) public voteHistory;
     // election ticket storage
     mapping(uint256 => uint256[]) public tickets;
     // election internal ticket requirements
@@ -266,6 +269,17 @@ contract AnonymousVoting is IAnonymousVoting, TicketSpender {
         require(result == true, "incorrect proof");
         nullified[electionId][serial] = true;
         votes[electionId][merkleRoot][option]++;
+        bool currentVoteBlockExists = false;
+        for(uint256 i = 0; i < voteHistory[electionId][option].length; i++) {
+            if(voteHistory[electionId][option][i].timestamp == block.timestamp) {
+                currentVoteBlockExists = true;
+                voteHistory[electionId][option][i].votes++;
+                break;
+            }
+        }
+        if(!currentVoteBlockExists) {
+            voteHistory[electionId][option].push(VoteBlock(block.timestamp, 1));
+        }
         Party[] memory parties = new Party[](electionParties[electionId].length);
         for (uint256 i = 0; i < electionParties[electionId].length; i++) {
             parties[i] = electionParties[electionId][i];
@@ -274,11 +288,20 @@ contract AnonymousVoting is IAnonymousVoting, TicketSpender {
         emit LeaderBoardUpdate(electionId, parties);
     }
 
-    /**
-     * @notice Allows users to fetch tickets and build
-     *   their own Merkle tree, so they can construct
-     *   their Merkle proof locally
-     */
+    function getVoteHistoryByParty(uint256 electionId, uint256 partyId)
+        external
+        view
+        override
+        returns (VoteBlock[] memory)
+    {
+        require(election[electionId].exists, "election not registered");
+        require(
+            partyId < electionParties[electionId].length,
+            "partyId out of range"
+        );
+        return voteHistory[electionId][partyId];
+    }
+
     function getTickets(
         uint256 electionId
     ) external view override returns (uint256[] memory) {

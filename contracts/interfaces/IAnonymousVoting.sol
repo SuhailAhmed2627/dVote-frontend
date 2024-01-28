@@ -16,6 +16,12 @@ struct Party {
     uint256 votes;
 }
 
+
+struct VoteBlock {
+    uint256 timestamp;
+    uint256 votes;
+}
+
 interface IAnonymousVoting {
 
     function registerElection(
@@ -36,6 +42,8 @@ interface IAnonymousVoting {
     function getElectionsByUser()  external view returns (Election[] memory);
 
     function getElectionParties(uint256 electionId) external view returns (Party[] memory);
+
+    function getVoteHistoryByParty(uint256 electionId, uint256 partyId) external view returns (VoteBlock[] memory);
 
     function getAllActiveElections()  external view returns (Election[] memory);
     

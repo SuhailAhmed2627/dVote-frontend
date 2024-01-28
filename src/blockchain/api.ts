@@ -119,7 +119,6 @@ export async function voteWithTicket(
 			serial: serial,
 		},
 	});
-	console.log(await proofResponse.json());
 	const solProof: { proof: string } = await proofResponse.json();
 	// call the contract to spend the ticket
 	const anonymousVoting = new Contract(contractID, contractABI, signer);

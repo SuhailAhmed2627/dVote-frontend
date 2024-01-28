@@ -48,7 +48,7 @@ const Elections = () => {
 			if (!user) return;
 			const elections = await getAllActiveElections(user);
 			const processed = processElectionData(elections);
-			// Remove empty elections
+			console.log(processed);
 			const filtered = processed.filter((election) => election.name !== "");
 			return filtered;
 		},
@@ -79,25 +79,27 @@ const Elections = () => {
 	}
 
 	return (
-		<Center className="h-full w-full flex flex-col justify-center items-center gap-10 pt-32 pb-10 overflow-y-auto">
-			{getElectionsQuery.data.map((election) => (
-				<Center
-					component={Link}
-					to={`/home/elections/${election.id}`}
-					key={election.id}
-					className="max-w-[500px] shadow-lg rounded-lg gap-4 justify-between p-4 bg-gradient-to-br from-orange-500 to-orange-400"
-				>
-					<Center className="flex max-w-[400px] flex-col gap-0 items-start">
-						<Text className="text-2xl text-white font-semibold text-center">
-							{election.name}
-						</Text>
-						<Text lineClamp={2} className="text-white text-sm">
-							{election.description}
-						</Text>
+		<Center className="h-full w-full">
+			<Center className="w-[90%] md:w-[40%] flex flex-col justify-center items-stretch gap-10 pt-10 pb-10 overflow-y-auto">
+				{getElectionsQuery.data.map((election) => (
+					<Center
+						component={Link}
+						to={`/home/elections/${election.id}`}
+						key={election.id}
+						className=" shadow-lg rounded-lg gap-4 justify-between p-4 bg-gradient-to-br from-orange-500 to-orange-400"
+					>
+						<Center className="flex flex-col gap-0 w-[70%] items-start">
+							<Text className="text-2xl text-white font-semibold text-center">
+								{election.name}
+							</Text>
+							<Text lineClamp={2} className="text-white text-sm">
+								{election.description}
+							</Text>
+						</Center>
+						<IconRubberStamp className="[&>path]:text-white" size={48} />
 					</Center>
-					<IconRubberStamp className="[&>path]:text-white" size={48} />
-				</Center>
-			))}
+				))}
+			</Center>
 		</Center>
 	);
 };

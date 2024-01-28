@@ -9,7 +9,7 @@ import {
 } from "@mantine/core";
 import { useMutation, useQueries, useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { getUser } from "../../utils/helpers";
+import { getUser, showNotification } from "../../utils/helpers";
 import {
 	getElectionParties,
 	getElectionsByUser,
@@ -114,6 +114,7 @@ const Election = () => {
 	const { electionId } = useParams();
 	const [voted, setVoted] = useState(false);
 	const user = getUser();
+	const [isLoading, setIsLoading] = useState(false);
 	const [getElectionDetailsQuery, getElectionPartiesQuery] = useQueries([
 		{
 			queryKey: ["electionDetail", electionId],
@@ -159,15 +160,28 @@ const Election = () => {
 				secret,
 				candidateId
 			);
-			const voteRes = await voteWithTicket(
-				user,
-				electionId,
-				secret,
-				candidateId
-			);
-		},
-		onSuccess: () => {
-			setVoted(true);
+			if (!ticketRes) {
+				showNotification("Error", "You have Voted earlier", "error");
+				setIsLoading(false);
+				setVoted(true);
+				return;
+			}
+			showNotification("Ticket", "Ticket registered", "info");
+			setTimeout(async () => {
+				const voteRes = await voteWithTicket(
+					user,
+					electionId,
+					"06200267391764307219",
+					candidateId
+				);
+				if (voteRes) {
+					setVoted(true);
+					showNotification("Success", "Voted successfully", "success");
+				} else {
+					showNotification("Error", "Unable to vote", "error");
+				}
+				setIsLoading(false);
+			}, 10000);
 		},
 	});
 
@@ -206,9 +220,10 @@ const Election = () => {
 			</Table.Td>
 			<Table.Td align="right">
 				<Button
-					loading={voteMutation.isLoading}
-					disabled={voteMutation.isLoading}
+					loading={isLoading}
+					disabled={isLoading}
 					onClick={() => {
+						setIsLoading(true);
 						voteMutation.mutate({
 							electionId: electionId,
 							candidateId: item.id,
@@ -226,7 +241,7 @@ const Election = () => {
 
 	return (
 		<Center className="h-full w-full flex flex-col justify-center items-center gap-10">
-			<Container>
+			<Container className="w-[90%] md:w-[40%] ">
 				<Text className="text-2xl font-semibold">
 					{getElectionDetailsQuery.data.name}
 				</Text>
@@ -238,10 +253,7 @@ const Election = () => {
 						You have already voted in this election.
 					</Text>
 				) : (
-					<Table
-						verticalSpacing="sm"
-						className="w-full mt-8 min-w-[400px]"
-					>
+					<Table verticalSpacing="sm" className="w-full mt-8">
 						<Table.Thead>
 							<Table.Tr>
 								<Table.Th>Candidates</Table.Th>

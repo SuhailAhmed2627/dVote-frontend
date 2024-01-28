@@ -10,8 +10,9 @@ async function createProof(pub) {
 
 async function getSoliditySnark(proof, pub) {
 	const callargs = await snark.plonk.exportSolidityCallData(proof, pub);
-	console.log(callargs.slice(0, callargs.indexOf(",")));
-	return callargs.slice(0, callargs.indexOf(","));
+	const proofSol = callargs.slice(2, callargs.indexOf(",") - 1);
+	console.log(proofSol);
+	return proofSol;
 }
 
 module.exports = {

@@ -8,6 +8,7 @@ app.use(express.json());
 const port = 3001;
 
 app.post("/verifyProof", async (req, res) => {
+	console.log("verifyProof received for ticket :", req.body.ticket);
 	fullSpendTicket(
 		req.body.merkleProof,
 		req.body.secret,

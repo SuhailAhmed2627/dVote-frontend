@@ -48,6 +48,7 @@ const Stats = () => {
 		if (!electionId) return;
 		const getNew = async () => {
 			const newData = await getElectionParties(user, electionId);
+			console.log(newData);
 			setCurrent(processCandData(newData) as any);
 		};
 		getNew();

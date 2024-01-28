@@ -1,4 +1,12 @@
 export const contractID = "0xcfFC37E2C4dc670D76438dD50340b84F8E0dA78d";
+export const PORT_CLIENT = 3000;
+export const PORT_SERVER = 3001;
+export const ENV: "DEV" | "PROD" = "DEV";
+export const BACKEND_URL =
+	ENV === "DEV" ? `http://localhost:${PORT_SERVER}` : "";
+export const FRONTEND_URL =
+	ENV === "DEV" ? `http://localhost:${PORT_CLIENT}` : "";
+export const ADMIN_PANEL_URL = "/admin";
 export const contractABI = [
 	{
 		anonymous: false,
@@ -577,10 +585,3 @@ export const contractABI = [
 		type: "function",
 	},
 ];
-export const PORT_CLIENT = 3000;
-export const PORT_SERVER = 8000;
-export const ENV: "DEV" | "PROD" = "DEV";
-export const BACKEND_URL =
-	ENV === "DEV" ? `http://localhost:${PORT_SERVER}` : "";
-export const FRONTEND_URL =
-	ENV === "DEV" ? `http://localhost:${PORT_CLIENT}` : "";

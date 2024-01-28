@@ -47,9 +47,9 @@ const ConnectWallet = () => {
 		// 		"now+4000"
 		// 	)
 		// );
-		//console.log(await registerTicket(signer, "12", "111", "1"));
-		console.log(await getTickets(signer, "6"));
-		//console.log(await voteWithTicket(signer, "12", "111", "1"));
+		//console.log(await registerTicket(signer, "5", "12345678910", "1"));
+		// console.log(await getTickets(signer, "6"));
+		console.log(await voteWithTicket(signer, "5", "12345678910", "1"));
 		// console.log(await getElectionsByUser(signer));
 		// console.log(await getElectionParties(signer, "0"));
 	}

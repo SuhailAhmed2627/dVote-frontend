@@ -3,4 +3,8 @@ dist/
 zkt/node_modules/
 yarn-error.log
 snark_data/
+typechain-types/
 config.ts
+powersOfTau28_hez_final_16.ptau
+circom
+.env

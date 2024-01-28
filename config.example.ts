@@ -1,4 +1,12 @@
-export const contractID = "0xe9738b2a0EC248a0dbbB73685ED2ce5E67FF37b7";
+export const contractID = "0xcfFC37E2C4dc670D76438dD50340b84F8E0dA78d";
+export const PORT_CLIENT = 3000;
+export const PORT_SERVER = 3001;
+export const ENV: "DEV" | "PROD" = "DEV";
+export const BACKEND_URL =
+	ENV === "DEV" ? `http://localhost:${PORT_SERVER}` : "";
+export const FRONTEND_URL =
+	ENV === "DEV" ? `http://localhost:${PORT_CLIENT}` : "";
+export const ADMIN_PANEL_URL = "/admin";
 export const contractABI = [
 	{
 		anonymous: false,
@@ -22,11 +30,6 @@ export const contractABI = [
 						type: "string",
 					},
 					{
-						internalType: "string",
-						name: "description",
-						type: "string",
-					},
-					{
 						internalType: "bool",
 						name: "exists",
 						type: "bool",
@@ -47,6 +50,42 @@ export const contractABI = [
 		type: "event",
 	},
 	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "electionId",
+				type: "uint256",
+			},
+			{
+				internalType: "address",
+				name: "moderator",
+				type: "address",
+			},
+		],
+		name: "addModerator",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "electionId",
+				type: "uint256",
+			},
+			{
+				internalType: "address",
+				name: "voter",
+				type: "address",
+			},
+		],
+		name: "addVoter",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
 		inputs: [],
 		name: "electionCount",
 		outputs: [
@@ -54,6 +93,30 @@ export const contractABI = [
 				internalType: "uint256",
 				name: "",
 				type: "uint256",
+			},
+		],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256",
+			},
+			{
+				internalType: "uint256",
+				name: "",
+				type: "uint256",
+			},
+		],
+		name: "electionModerators",
+		outputs: [
+			{
+				internalType: "address",
+				name: "",
+				type: "address",
 			},
 		],
 		stateMutability: "view",
@@ -82,11 +145,6 @@ export const contractABI = [
 			{
 				internalType: "string",
 				name: "name",
-				type: "string",
-			},
-			{
-				internalType: "string",
-				name: "description",
 				type: "string",
 			},
 			{
@@ -150,6 +208,47 @@ export const contractABI = [
 				name: "electionId",
 				type: "uint256",
 			},
+		],
+		name: "getElectionParties",
+		outputs: [
+			{
+				components: [
+					{
+						internalType: "uint256",
+						name: "option",
+						type: "uint256",
+					},
+					{
+						internalType: "string",
+						name: "name",
+						type: "string",
+					},
+					{
+						internalType: "bool",
+						name: "exists",
+						type: "bool",
+					},
+					{
+						internalType: "uint256",
+						name: "votes",
+						type: "uint256",
+					},
+				],
+				internalType: "struct Party[]",
+				name: "",
+				type: "tuple[]",
+			},
+		],
+		stateMutability: "view",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "electionId",
+				type: "uint256",
+			},
 			{
 				internalType: "uint256",
 				name: "_merkleRoot",
@@ -168,11 +267,6 @@ export const contractABI = [
 					{
 						internalType: "string",
 						name: "name",
-						type: "string",
-					},
-					{
-						internalType: "string",
-						name: "description",
 						type: "string",
 					},
 					{
@@ -256,11 +350,6 @@ export const contractABI = [
 	{
 		inputs: [
 			{
-				internalType: "uint256",
-				name: "electionId",
-				type: "uint256",
-			},
-			{
 				internalType: "string",
 				name: "name",
 				type: "string",
@@ -274,6 +363,11 @@ export const contractABI = [
 				internalType: "address[]",
 				name: "_voters",
 				type: "address[]",
+			},
+			{
+				internalType: "string[]",
+				name: "_parties",
+				type: "string[]",
 			},
 			{
 				internalType: "uint256",
@@ -305,6 +399,24 @@ export const contractABI = [
 			},
 		],
 		name: "registerTicket",
+		outputs: [],
+		stateMutability: "nonpayable",
+		type: "function",
+	},
+	{
+		inputs: [
+			{
+				internalType: "uint256",
+				name: "electionId",
+				type: "uint256",
+			},
+			{
+				internalType: "address",
+				name: "moderator",
+				type: "address",
+			},
+		],
+		name: "removeModerator",
 		outputs: [],
 		stateMutability: "nonpayable",
 		type: "function",
@@ -473,11 +585,3 @@ export const contractABI = [
 		type: "function",
 	},
 ];
-export const ADMIN_PANEL_URL = "c3BpZGVyaXNnYXk";
-export const PORT_CLIENT = 3000;
-export const PORT_SERVER = 8000;
-export const ENV: "DEV" | "PROD" = "DEV";
-export const BACKEND_URL =
-	ENV === "DEV" ? `http://localhost:${PORT_SERVER}` : "";
-export const FRONTEND_URL =
-	ENV === "DEV" ? `http://localhost:${PORT_CLIENT}` : "";

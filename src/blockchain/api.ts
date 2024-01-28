@@ -1,8 +1,8 @@
 import { Contract, JsonRpcSigner } from "ethers";
 import { MerkleTree } from "./merkleTree";
 import { postreidon } from "./poseidon/poseidon";
-import { createProof, getSoliditySnark } from "./snark";
 import { contractID, contractABI } from "../../config";
+import { dataFetch } from "../utils/helpers";
 
 const TREE_DEPTH = 21;
 
@@ -90,7 +90,6 @@ export async function voteWithTicket(
 	// get ticket and serial
 	const ticket: string = postreidon([secret, option]);
 	const serial: string = postreidon([secret, ticket]);
-	console.log(ticket, serial);
 
 	// get tickets from the smart contract
 	const tickets: string[] = await getTickets(signer, electionId);
@@ -103,23 +102,20 @@ export async function voteWithTicket(
 	const merkleRoot = merkleTree.root();
 	const merkleProof = merkleTree.proof(index);
 
-	// build a zksnark
-	const zksnark = await createProof({
-		option: option,
-		serial: serial,
-		root: merkleRoot,
-		ticket: ticket,
-		secret: secret,
-		proof: merkleProof,
+	const proofResponse = await dataFetch({
+		url: "/verifyProof",
+		method: "POST",
+		body: {
+			merkleProof: merkleProof,
+			secret: secret,
+			option: option,
+			merkleRoot: merkleRoot,
+			ticket: ticket,
+			serial: serial,
+		},
 	});
-
-	// get solidity formatted proof
-	const solproof = await getSoliditySnark(
-		zksnark.proof,
-		zksnark.publicSignals
-	);
-	console.log(solproof);
-
+	console.log(await proofResponse.json());
+	const solProof: { proof: string } = await proofResponse.json();
 	// call the contract to spend the ticket
 	const anonymousVoting = new Contract(contractID, contractABI, signer);
 	await anonymousVoting.spendTicket(
@@ -127,7 +123,7 @@ export async function voteWithTicket(
 		merkleRoot,
 		option,
 		serial,
-		solproof
+		solProof.proof
 	);
 
 	return {
